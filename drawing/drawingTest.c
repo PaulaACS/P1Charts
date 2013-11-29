@@ -41,9 +41,21 @@ int main() {
  	cairo_set_source_rgba(cairo->context, 1.0, 1.0, 0.0, 1.0);
  	cairo_stroke(cairo->context);*/
 
- 	cairo_set_source_rgb(cairo->context, 0.0, 0.0, 0.0);
+ 	/*cairo_set_source_rgb(cairo->context, 0.0, 0.0, 0.0);
 	cairo_arc (cairo->context, 400, 300, 2, 0, 2* M_PI);
-	cairo_fill(cairo->context);
+	cairo_fill(cairo->context);*/
+
+	Arc arc = {400, //x
+				300, //y				
+				30, //r
+				10.0, //borderWidth
+				0, //angle_i
+				2* M_PI, //angle_f
+				{0.0, 0.6, 0.4, 1.0}, // Color Bg
+				{0.0, 0.0, 1.0, 1.0} // Color border
+	};
+	CairoDefDrawArc(cairo, arc);
+
 
 	/*************************
  	* 3 - Salvar em arquivo *

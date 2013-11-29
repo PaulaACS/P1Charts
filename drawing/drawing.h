@@ -20,12 +20,28 @@ struct _rectangle {
 	float width;
 	float height;
 	float borderWidth;
-	Color bg;
+	Color bg;  // fundo
 	Color border;
 };
 
 typedef struct _rectangle Rectangle;
 
+struct _arc {
+	int x;
+	int y;
+	int r;
+	float borderwidth;
+	float angle_i; 
+	float angle_f;
+	Color bg;
+	Color border;
+};
+
+typedef  struct _arc Arc;
+
 CairoDef * CairoDef_Init();
 void CairoDef_Destroy(CairoDef * self);
 void CairoDefDrawRectangle(CairoDef * self, Rectangle rect);
+void CairoDefDrawArc(CairoDef * self, Arc arc);
+
+
