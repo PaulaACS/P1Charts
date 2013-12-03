@@ -1,57 +1,68 @@
 #include "drawing.h"
 
-CairoDef * CairoDef_Init(int width, int height) {
-	CairoDef * self = malloc(sizeof(CairoDef));
-	self->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+Drawer * DrawerInit(int width, int height, char fileTypePDF, const char * filePath) {
+	Drawer * self = malloc(sizeof(Drawer));
+	if(fileTypePDF) {
+		self->surface = cairo_pdf_surface_create(filePath, width, height);
+	} else {
+		self->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+	}
     self->context = cairo_create(self->surface);
     // cairo_set_antialias(self->context, CAIRO_ANTIALIAS_BEST);
     return self;
 }
 
-void CairoDef_Destroy(CairoDef * self){
+void DrawerDestroy(Drawer * self){
 	cairo_destroy(self->context);
     cairo_surface_destroy(self->surface);
     free(self);
 }
 
-void CairoDefDrawRectangle(CairoDef * self, Rectangle rect) {
-	cairo_save(self->context);
-	cairo_set_line_width(self->context, rect.borderWidth);
-	cairo_rectangle (self->context, rect.x, rect.y, rect.width, rect.height);
-	cairo_set_source_rgba(self->context,
-						  rect.bg.r,
+void DrawerDrawRectangle(Drawer * self, Rectangle rect) {
+	cairo_save(self->context); // matem os desenhos já feitos, evita que seja feito um desenho sobre o outro.
+	cairo_set_line_width(self->context, rect.borderWidth); // "largura do piloto de desenho". É passado um ponteiro que aponta para o 									context e a largura da borda.
+	cairo_rectangle (self->context, rect.x, rect.y, rect.width, rect.height); // função da biblioteca cairo que desenha, nesse acaso, 											retângulos.
+	cairo_set_source_rgba(self->context, // função da biblioteca cairo que define as cores
+						  rect.bg.r, // struct dentro de uma struct
 						  rect.bg.g,
 						  rect.bg.b,
 						  rect.bg.a);
-	cairo_fill_preserve(self->context);
+	cairo_fill_preserve(self->context); // salva as últimas definições. A seta é porque ele é um ponteiro do tipo Drawer que aponta para 							uma struct Drawer. Um ponteiro que está alterando uma atribuição da struct.
  	cairo_set_source_rgba(self->context,
  						  rect.border.r,
  						  rect.border.g,
  						  rect.border.b,
  						  rect.border.a);
- 	cairo_stroke(self->context);
- 	cairo_restore(self->context);
+ 	cairo_stroke(self->context); 
+ 	cairo_restore(self->context); 
 }
 
-void CairoDefDrawArc(CairoDef * self, Arc arc){
+void DrawerDrawArc(Drawer * self, Arc arc) {
 	cairo_save(self->context);
-	cairo_set_line_width(self->context, arc.borderwidth);
 	cairo_arc (self->context, arc.x, arc.y, arc.r, arc.angle_i, arc.angle_f);
+	
+	cairo_set_line_width(self->context, arc.borderWidth);
 	cairo_set_source_rgba(self->context,
-						arc.bg.r,
+						arc.bg.r, 
 						arc.bg.g,
 						arc.bg.b,
-						arc.bg.a); // pontos significa que estou remetendo ao paramentro da stract
+						arc.bg.a);
 	cairo_fill_preserve(self->context);
-	cairo_set_source_rgba(self->context,
+	cairo_set_source_rgba(self->context, 
 						arc.border.r,
-						arc.border.g,
-						arc.border.b,
-						arc.border.a);
+ 						arc.border.g,
+ 						arc.border.b,
+ 						arc.border.a);
 	cairo_stroke(self->context);
 	cairo_restore(self->context);
 }
 
-
+void DrawerSave(Drawer * self, char fileTypePDF, const char * filePath) {
+	if(fileTypePDF) {
+		cairo_show_page(self->context);
+	} else {
+		cairo_surface_write_to_png(self->surface, filePath);
+	}
+}
 
 

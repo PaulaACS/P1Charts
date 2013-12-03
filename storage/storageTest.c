@@ -3,6 +3,6 @@
 
 int main() {
 	printf("Hello storage!\n");
-	ChartDetails * test = ChartDetailsCreate(0);
+	Chart * test = ChartCreate("../test.json");
 	return 0;
 }
