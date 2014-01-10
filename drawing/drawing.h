@@ -31,9 +31,9 @@ typedef struct _rectangle Rectangle;
 struct _arc {
 	int x;
 	int y;
-	int r;
 	float angle_i;
 	float angle_f;
+	float r;
 	float borderWidth;
 	Color bg;
 	Color border;
@@ -44,5 +44,5 @@ typedef struct _arc Arc;
 Drawer * DrawerInit(int width, int height, char fileTypePDF, const char * filePath);
 void DrawerDestroy(Drawer * self);
 void DrawerDrawRectangle(Drawer * self, Rectangle rect);
-void DrawerSave(Drawer * self, char fileTypePDF, const char * filePath);
 void DrawerDrawArc(Drawer * self, Arc arc);
+void DrawerSave(Drawer * self, char fileTypePDF, const char * filePath);

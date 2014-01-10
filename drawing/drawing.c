@@ -39,9 +39,21 @@ void DrawerDrawRectangle(Drawer * self, Rectangle rect) {
 
 void DrawerDrawArc(Drawer * self, Arc arc) {
 	cairo_save(self->context);
-	cairo_arc (self->context, arc.x, arc.y, arc.r, arc.angle_i, arc.angle_f);
-	
 	cairo_set_line_width(self->context, arc.borderWidth);
+	cairo_arc (self->context, 
+				arc.x, 
+				arc.y, 
+				arc.r, 
+				arc.angle_i, 
+				arc.angle_f);
+	cairo_line_to(self->context, arc.x, arc.y);
+	cairo_arc (self->context, 
+				arc.x, 		
+				arc.y, 
+				arc.r, 	
+				arc.angle_i, 
+				arc.angle_i);
+	cairo_line_to(self->context, arc.x, arc.y);
 	cairo_set_source_rgba(self->context,
 						arc.bg.r, 
 						arc.bg.g,
